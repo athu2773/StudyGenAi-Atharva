@@ -57,16 +57,34 @@ const Dashboard = () => {
 
   const handleAddSyllabus = async () => {
     const token = localStorage.getItem("token");
-    const res = await fetch("http://localhost:8080/api/syllabus", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ subject, deadline, topics: topics.split(",").map((t) => ({ title: t.trim(), completed: false })) }),
-    });
-    const data = await res.json();
-    setSyllabus((prev) => [...prev, data]);
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080/api";
+    try {
+      const res = await fetch(`${API_BASE_URL}/syllabus`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          subject,
+          deadline,
+          topics: topics.split(",").map((t) => ({ title: t.trim(), completed: false }))
+        }),
+      });
+      if (!res.ok) {
+        const errData = await res.json();
+        setError(errData.error || "Failed to add syllabus");
+        return;
+      }
+      const data = await res.json();
+      setSyllabus((prev) => [...prev, data]);
+      setSubject("");
+      setDeadline("");
+      setTopics("");
+      setError("");
+    } catch (err) {
+      setError("Network error: Unable to add syllabus",err);
+    }
   };
 
   const handleDeleteSyllabus = async (id) => {
@@ -85,16 +103,19 @@ const Dashboard = () => {
             <input
               className="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
               placeholder="Subject"
+              value={subject}
               onChange={(e) => setSubject(e.target.value)}
             />
             <input
               className="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
               placeholder="Deadline (YYYY-MM-DD)"
+              value={deadline}
               onChange={(e) => setDeadline(e.target.value)}
             />
             <input
               className="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
               placeholder="Topics (comma-separated)"
+              value={topics}
               onChange={(e) => setTopics(e.target.value)}
             />
           </div>

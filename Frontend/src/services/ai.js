@@ -1,5 +1,7 @@
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080/api";
+
 export const generatePlan = async (payload, token) => {
-  const res = await fetch("http://localhost:8080/api/ai/plan", {
+  const res = await fetch(`${API_BASE_URL}/ai/plan`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -11,7 +13,7 @@ export const generatePlan = async (payload, token) => {
 };
 
 export const generateFlashcards = async (payload, token) => {
-  const res = await fetch("http://localhost:8080/api/ai/flashcards", {
+  const res = await fetch(`${API_BASE_URL}/ai/flashcards`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -23,7 +25,7 @@ export const generateFlashcards = async (payload, token) => {
 };
 
 export const generateQuiz = async (payload, token) => {
-  const res = await fetch("http://localhost:8080/api/ai/quiz", {
+  const res = await fetch(`${API_BASE_URL}/ai/quiz`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
