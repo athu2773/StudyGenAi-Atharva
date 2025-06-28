@@ -7,9 +7,13 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
+# Ignore Vercel deployment folder
+.vercel/
+# Ignore build output
+/dist/
+# Ignore node_modules
+/node_modules/
+
 *.local
 
 # Editor directories and files
@@ -22,5 +26,3 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-
-.vercel
